@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>SimpleSelection Test</title>
+	
+	<style type="text/css" media="screen">
+		body {
+			margin: 2em;
+			width: 40em;
+		}
+		.editable_text {
+			margin: 1em 0;
+			min-height: 5em;
+			border: 1px solid #ccc;
+			padding: 1em;
+		}
+	</style>
+	
+	<script src="jquery-1.3.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../src/SimpleRange.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../src/SimpleSelection.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../src/providers/SimpleSelection.jQuery.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	
+	<div id="infotop">hey</div>
+	<div id="info" style="height: 8em; overflow: hidden;">hey</div>
+	
+	<p>
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+		Phasellus tincidunt hendrerit mi in posuere. 
+		<strong>Sed tempus elementum odio. Aliquam erat volutpat. </strong>
+		In ligula massa, lacinia et tempus et, mollis sollicitudin enim. 
+		<em>Integer et ipsum purus. Nunc ut nisi nec nunc dapibus pharetra.</em> 
+		Pellentesque placerat mollis ligula sed convallis. 
+		<span style="font-size:1.2em;"><strong>Ut quis turpis</strong> eu risus tincidunt mattis.</span> 
+		Nullam ante enim, porttitor eget scelerisque et, faucibus at eros. 
+		Mauris sit amet massa sem, dignissim vulputate felis. 
+		Phasellus aliquet mauris ut est tristique eu auctor ipsum porttitor. 
+		Fusce facilisis tellus est, id accumsan nunc. 
+		Nunc mattis pellentesque pulvinar. Nullam suscipit interdum auctor. 
+		Praesent ut quam ac orci mattis tincidunt id suscipit ipsum.
+	</p>
+	<p>
+		Nullam dui enim, cursus nec egestas quis, consectetur non nisl. 
+		Cras in ante nec quam porttitor suscipit. Fusce non tortor mi. 
+		Phasellus ut dapibus sem. Aliquam sollicitudin ante et massa lobortis vulputate feugiat massa tempor. 
+		Ut pulvinar elit orci, in venenatis magna. Quisque condimentum tempus fringilla. 
+		Aliquam diam enim, fermentum in luctus et, semper quis neque. 
+		Sed pharetra nulla non nisl mollis et eleifend dui malesuada. 
+		Donec nibh metus, aliquam eu tristique molestie, porta eget purus. 
+		Nulla viverra egestas leo sit amet scelerisque. Ut quis dolor et purus semper porta.
+	</p>
+	
+	<div class="editable_text" contenteditable="true">
+		You <em>can <strong id="testStrong">edit</strong> the</em> text in this box. And<br>
+		now this sp<strong>lits a w</strong>ord<em>. And</em> <strong>a sentence.</strong><br>
+		And just a plain sentence.<br>
+		And how long<br>
+		Until this gets<br>
+		Really really<br>
+		SLOW<br>
+		??? huh?<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah<br>
+		yeah yeah
+	</div>
+	
+	<div id="will_be_editable" class="editable_text">
+		Dynamically made editable
+	</div>
+	
+	<script type="text/javascript" charset="utf-8">
+		document.getElementById("will_be_editable").contentEditable = true;
+		
+		SimpleSelection.addEventListener(document.body, "selection", function() {
+			console.log("Selection on body");
+			$("#infotop").text("SimpleSelection event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		SimpleSelection.addEventListener($(".editable_text")[0], "selection", function(e) {
+			console.log("Selection on first editable");
+		});
+		SimpleSelection.addEventListener(document.getElementById("will_be_editable"), "selection", function(e) {
+			e.stopPropagation();
+			console.log("Selection on second editable (should not propagate)");
+		});
+		$(document.body).bind("select", function(e) {
+			$("#infotop").text("'select' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("selectstart", function(e) {
+			$("#infotop").text("'selectstart' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document).bind("beforecopy", function(e) {
+			$("#infotop").text("'beforecopy' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document).bind("copy", function(e) {
+			$("#infotop").text("'copy' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(window).bind("focus", function(e) {
+			$("#infotop").text("'focus' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("search", function(e) {
+			$("#infotop").text("'search' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("mouseup", function(e) {
+			$("#infotop").text("'mouseup' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("mousedown", function(e) {
+			$("#infotop").text("'mousedown' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		var clickfunc = function() {};
+		// $(document.body).bind("click", clickfunc);
+		$(document.body).bind("touchstart", function(e) {
+			$("#infotop").text("'touchstart' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("touchend", function(e) {
+			$("#infotop").text("'touchend' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("touchcancel", function(e) {
+			$("#infotop").text("'touchcancel' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("touchmove", function(e) {
+			$("#infotop").text("'touchmove' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("gesturestart", function(e) {
+			$("#infotop").text("'gesturestart' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("gesturechange", function(e) {
+			$("#infotop").text("'gesturechange' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+		$(document.body).bind("gestureend", function(e) {
+			$("#infotop").text("'gestureend' event");
+			$("#info").text(SimpleSelection.getHTML() || "[none]");
+		});
+	</script>
+
+</body>
+</html>
