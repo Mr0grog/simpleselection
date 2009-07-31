@@ -1,0 +1,19 @@
+SimpleSelection is a very simple JavaScript interface for working with selected text in an (x)HTML document.
+
+Why?
+Because the DOM selection object and text ranges are powerful, but cumbersome.
+Because they aren't implemented across all browsers (*cough*ie*cough*).
+Because browsers that *do* implement them are still varied in their details.
+Because it's just useful!
+
+Note that there is a similar project, IERange (http://code.google.com/p/ierange/), which aims to implement W3C DOM Ranges in IE. The goal of SimpleSelection is, instead, to simplify common operations that might be done with Ranges and Selections, such as determining if a selection is roughly equivalent to an element, replacing or wrapping a selection, and so on.
+
+SimpleSelection is tested in Safari 3+, Firefox 3+, and IE7+ (ought to work in IE6 as well, but it hasn't been extensively tested).
+
+SimpleSelection also provides an event for when selections are made or changed in the document.
+
+
+BUILD INSTRUCTIONS
+------------------
+
+Just run make.
