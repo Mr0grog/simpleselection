@@ -111,6 +111,7 @@
 	</div>
 	
 	<script type="text/javascript" charset="utf-8">
+		if (!window.console) { window.console = { log: function() {} }; }
 		document.getElementById("will_be_editable").contentEditable = true;
 		
 		SimpleSelection.addEventListener(document.body, "selection", function() {

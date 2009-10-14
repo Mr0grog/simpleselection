@@ -22,12 +22,8 @@ var SimpleSelection = {
 	 * @return {SimpleRange}
 	 */
 	getRange: function() {
-		// IE
-		if (document.selection) {
-			return new SimpleRange(document.selection.createRange());
-		}
-		// DOM
-		else {
+		// DOM -- note: this must come first since Opera sort of but not really supports document.selection
+		if (window.getSelection) {
 			var sel = window.getSelection();
 			// NOTE: in FIREFOX in editable areas (input, textarea, contentEditable) 
 			// shift+arrow keys actually *mutates* the selection's range instead 
@@ -35,6 +31,10 @@ var SimpleSelection = {
 			// simple and sane, we'll clone the range so that grabbing the 
 			// selection's range always produces a new result.
 			return new SimpleRange(sel.rangeCount ? sel.getRangeAt(0).cloneRange() : null);
+		}
+		// IE
+		else if (document.selection) {
+			return new SimpleRange(document.selection.createRange());
 		}
 	},
 	
