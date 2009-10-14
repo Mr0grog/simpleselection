@@ -162,8 +162,13 @@ var SimpleSelection = {
 		if (e.type !== "mouseout" || e.target === document.documentElement) {
 			var newSel = SimpleSelection.getRange();
 			if (!this._currentSelection || !this._currentSelection.equals(newSel)) {
+				// First fire an empty selection event on the previously selected node to signal deselection
+				// TODO: be smarter about how this is done so a given node won't receive both an empty selection and then the real new selection
+				if (this._currentSelection) {
+					this.fireEvent("selection", this._currentSelection.getContainingNode(), e.type, new SimpleRange());
+				}
 				this._currentSelection = newSel;
-				this.fireEvent("selection", newSel.getContainingNode());
+				this.fireEvent("selection", newSel.getContainingNode(), e.type);
 			}
 		}
 	},
@@ -209,16 +214,19 @@ var SimpleSelection = {
 	 * @param {HTML Element} [node] Node to fire the selection event on. 
 	 * 		If not specified, the current selection will be queried to find the selected node.
 	 */
-	fireEvent: function(eventType, node) {
+	fireEvent: function(eventType, node, sourceType, range) {
 		if (!node) {
 			this._currentSelection = this.getRange();
 			node = this._currentSelection.getContainingNode();
+			if (!node) { node = document.body; }
 		}
 		
 		var bubble = true;
 		var evt = {
-			selection: this._currentSelection,
+			selection: range || this._currentSelection,
 			target: node,
+			type: "selection",
+			sourceType: sourceType,
 			stopPropagation: function() { bubble = false; }
 		};
 		
