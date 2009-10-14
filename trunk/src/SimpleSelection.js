@@ -10,7 +10,7 @@ in the user's selection.
 
 
 var SimpleSelection = {
-	eventThrottle: 500,
+	eventThrottle: 250,
 	_lastListen: 0,
 	
 	_selectionListeners: {},
